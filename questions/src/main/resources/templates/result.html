@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../static/js/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../static/js/themes/icon.css" rel="stylesheet" type="text/css" />
+
+</head>
+<style>
+    *,body{
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<body>
+<!--<div>
+    <ul style="list-style-position: outside;list-style-type: none;list-style-image: none;width: 350px">
+        <li style="padding-bottom: 30px">
+            <img src="../static/images/phone.png" width="25" height="30" style="float: left;margin: 10px">
+            <h4 style="font-weight: 400;color: #acbdff;padding-bottom: 4px;font-size: 14px;display: block">联系电话</h4>
+            <h5 style="font-size: 18px;color: #acbdff;">400-870-1230</h5>
+        </li>
+        <li style="padding-bottom: 30px">
+            <img src="../static/images/qqlogin.png" width="25" height="30" style="float: left;margin: 10px">
+            <h4 style="font-weight: 400;color: #acbdff;padding-bottom: 4px;font-size: 14px;display: block">官方QQ</h4>
+            <h5 style="font-size: 18px;color: #acbdff;">400-870-1230</h5>
+        </li>
+        <li style="padding-bottom: 30px">
+            <img src="../static/images/email.png" width="25" height="30" style="float: left;margin: 10px">
+            <h4 style="font-weight: 400;color: #acbdff;padding-bottom: 4px;font-size: 14px;display: block">官方Email</h4>
+            <h5 style="font-size: 18px;color: #acbdff;">400-870-1230</h5>
+        </li>
+    </ul>
+</div>-->
+<form id="form1" action="vue.html" method="post">
+    <input id="vv" class="easyui-validatebox" data-options="validType:'email',invalidMessage:'请输入正确的email',missingMessage:'请规范填写email'"/>
+    <input class="easyui-validatebox" data-options="validType:'ip'">
+    <input class="easyui-validatebox" data-options="validType:'port'">
+    <input class="easyui-validatebox" data-options="required:true,validType:'name'">
+    <select id="cc" class="easyui-combobox" name="dept" style="width:200px;" >
+        <option>aitem1</option>
+        <option>bitem2</option>
+        <option>bitem3</option>
+        <option>ditem4</option>
+        <option>eitem5</option>
+    </select>
+    <input type="submit" value="提交">
+</form>
+<form id="setUp"  action="vue.html" method="post">
+    <table border="0" style="width:300px;line-height:26px;">
+        <tr>
+            <td style="white-space:nowrap; padding-bottom: 5px;width:55px;font-size:12px;"> 白盒密钥缓冲池大小:</td>
+            <td colspan="2">
+                <input id="current" name="value" value="" onkeyup="progress()" class="easyui-validatebox"
+                       data-options="required:true,validType:'curt',missingMessage:'请输入小于1024的数字或小数(小数点后两位)'"
+                        style="width:200px;border:1px solid #7fb5c1;height:25px;vertical-align:text-bottom;"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="lable" style="white-space:nowrap; letter-spacing: 0.5em; vertical-align: middle;font-size:12px;">&nbsp;</td>
+            <td colspan="2"><span id="showMsg" style="color:red;font-size:12px"></span></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <a href="javascript:void(0);" class="easyui-linkbutton" onclick="start()" style="width:90px;">设置</a>
+            </td>
+        </tr>
+    </table>
+</form>
+<form id="ff" method="post">
+    <div>
+        <label >Name:</label>
+        <input class="easyui-validatebox" type="text" name="name" data-options="required:true" />
+    </div>
+    <div>
+        <label >Email:</label>
+        <input class="easyui-validatebox" type="text" name="email" data-options="validType:'email'" />
+    </div>
+    ...
+</form>
+<a id="btn" href="#" class="easyui-linkbutton"  data-options="iconCls:'icon-search'">easyui</a>
+</body>
+<script>
+
+    $(function () {
+        var reg=/^([1-9][0-9]*)+(.[0-9]{1,2})?$/;
+        $.extend($.fn.validatebox.defaults.rules, {
+            ip: {
+                validator: function(value){
+                    return reg.test(value);
+                },
+                message: 'Please enter 纯数字'
+            },
+            port: {
+                validator: function(value){
+                    return reg.test(value);
+                },
+                message: 'Please enter 纯数字'
+            },
+            name: {
+                validator: function(value){
+                   var value1 = value.replace(" ","");
+                    return value1!='';
+                },
+                message: '不能为空'
+            },
+            curt:{
+                validator: function(value){
+
+                    return value!='' && reg.test(value) && value<1024;
+                },
+                message: '请输入小于1024的数字或小数(小数点后两位)'
+            },
+
+        });
+
+       /* $('#form1').form({
+            onSubmit:function(){
+                return $(this).form('validate');
+            },
+            success:function(data){
+                alert(data)
+            }
+        });*/
+    });
+    function a() {
+        alert("onSelect")
+    }
+    function ab() {
+        alert("onUnselect")
+    }
+    function start() {
+        $('#setUp').form('submit',{
+            onSubmit: function () {
+                if ($(this).form('validate')){
+                    $('#showMsg').html("正在登陆。。");
+                    return true;
+                }
+                return false;
+            },
+            success:function(data){
+                $('#showMsg').html("登陆成功。。");
+                window.setInterval("selSession()",1000);
+            }
+
+        });
+    };
+    function selSession() {
+        $('#showMsg').html('');
+    }
+</script>
+</html>

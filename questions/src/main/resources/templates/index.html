@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="yu" type="java"*/-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>主页</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <link th:href="@{iconfont/style.css}" type="text/css" rel="stylesheet">
+    <link th:href="@{js/themes/default/easyui.css}" type="text/css" rel="stylesheet">
+    <link th:href="@{js/themes/icon.css}" type="text/css" rel="stylesheet">
+    <script th:src="@{js/jquery.min.js}"></script>
+    <script th:src="@{js/jquery.easyui.min.js}"></script>
+    <script th:src="@{js/index.js}"></script>
+    <style type="text/css">
+        *,body{
+            margin: 0;
+            padding: 0;
+        }
+
+        ul{
+            list-style-image: none;
+            list-style-type: none;
+            list-style-position: outside;
+        }
+        li{
+            text-align: center;
+        }
+        img{
+            border: none;
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+<div region="north" border="true" split="true" style=" height: 50px;background-color: #9fcdff;line-height: 40px">
+    <div style="float: right">
+        <a th:href="@{/logout}" class="easyui-linkbutton" plain="true" data-options="iconCls:'icon-cancel'" style="margin-right: 10px">注销</a>
+    </div>
+    <div style="float: left;font-size: 20px">
+        欢迎<span th:text="${name}"></span>使用
+    </div>
+</div>
+<div region="west" split="true" title="类别" style="width: 200px;">
+    <div id="list" class="easyui-accordion" style="width:193px;height:auto;">
+        <div title="前端" style="padding:10px;">
+            <ul>
+                <li><a href="javascript:void(0);" class="easyui-linkbutton" plain="true" onclick="doSearch('前端','/web')" style="font-size: 15px;width: 100px">
+                    <img th:src="@{images/jiantou.png}" width="20" height="20" style="float: left">&nbsp;前端</a>
+                </li>
+            </ul>
+        </div>
+        <div title="后端" style="padding:10px;">
+            <ul>
+                <li><a href="javascript:void(0);" class="easyui-linkbutton" plain="true" onclick="doSearch('后端','/java')" style="font-size: 15px;width: 100px">
+                    <img th:src="@{images/jiantou.png}" width="20" height="20" style="float: left">&nbsp;后端</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="mainPanle" data-options="region:'center'" style="overflow: hidden; width: auto; height: auto;">
+    <div id="tt" class="easyui-tabs" style="width:auto;height:800px;">
+    </div>
+</div>
+<div  align="center" region="south" border="true" split="true" style="overflow: hidden; height: 30px;">
+    <div style="text-align: center;color: blue">
+       宁可天下人负我，也休叫我负天下人
+    </div>
+</div>
+</body>
+</html>

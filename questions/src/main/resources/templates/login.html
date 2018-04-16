@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>登录界面</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" th:href="@{css/bootstrap.css}">
+    <link th:href="@{iconfont/style.css}" type="text/css" rel="stylesheet">
+    <link th:href="@{js/themes/default/easyui.css}" type="text/css" rel="stylesheet">
+    <link th:href="@{js/themes/icon.css}" type="text/css" rel="stylesheet">
+    <script th:src="@{js/jquery.min.js}"></script>
+    <script th:src="@{js/jquery.easyui.min.js}"></script>
+    <script th:src="@{js/bootstrap.min.js}"></script>
+    <script th:src="@{js/login.js}"></script>
+    <script th:src="@{js/popper.min.js}"></script>
+</head>
+<body th:style="'background: url('+@{images/bg.jpg}+') no-repeat;'">
+<h5 style="color: white">程序员的加工厂</h5>
+<div class="container wrap1" style="height:450px;">
+    <div class="col-sm-8 col-md-5 center-auto pd-sm-50 pd-xs-20 main_content" th:style="'background: url('+@{images/main_bg.png}+') repeat;'">
+        <p class="text-center font16">用户登录</p>
+        <form id="form1" th:action="@{/userList}" method="post">
+            <div class="form-group mg-t20">
+                <i class="icon-user icon_font"></i>
+                <input class="login_input" id="username" name="username" placeholder="请输入用户名" style="color: white"/>
+            </div>
+            <div class="form-group mg-t20">
+                <i class="icon-lock icon_font"></i>
+                <input type="password" class="login_input" id="password" name="password" placeholder="请输入密码" style="color: white"/>
+            </div>
+            <div class="form-group mg-t20">
+                <i class="icon_font"></i>
+                <input type="text" id="input" />
+                <input type="button" id="checkCode" class="code" onclick="createCode()" />
+                <a href="javascript:void(0);" onclick="createCode()" style="color: white">点击更换</a>
+            </div>
+            <div style="text-align: center">
+                <button type="button" class="btn btn-success btn-block" id="submit_btn" onclick="login()">登 录</button>
+                <button type="button" class="btn btn-info btn-block" onclick="zhuce()">注 册</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="add" class="easyui-dialog" data-options="iconCls:'icon-save',modal:true" closed="true"
+     style="width:400px;height:300px;padding:10px" buttons="#add-buttons">
+        <form id="form2" th:action="@{/zhuCe}" method="post">
+            <div>
+                <label style="width: 40%;height: 40px;text-align: right;">用户名:</label>
+                <input class="easyui-validatebox" type="text" name="username" data-options="required:true,validType:'name',missingMessage:'请输入用户名'" />
+            </div>
+            <div>
+                <label style="width: 40%;height: 40px;text-align: right;">密码:</label>
+                <input class="easyui-validatebox" type="password" id="pwd" name="password" data-options="required:true,validType:'pwd',missingMessage:'请输入密码'" />
+            </div>
+            <div>
+                <label style="width: 40%;height: 40px;text-align: right;">确认密码:</label>
+                <input class="easyui-validatebox" type="password" data-options="required:true,validType:'eq',missingMessage:'确认密码'" />
+            </div>
+        </form>
+</div>
+<div style="position: absolute;bottom: 0;">
+    <p>更多资源：<a th:href="@{http://image.baidu.com/search/index?tn=baiduimage&ct=201326592&lm=-1&cl=2&ie=gbk&word=%B2%A8%B6%E0%D2%B0%BD%E1%D2%C2%C9%FA%BB%EE%D5%D5&fr=ala&ala=1&alatpl=adress&pos=0&hs=2&xthttps=000000}" target="_blank" style="color: red">与您共享</a></p>
+</div>
+<div id="add-buttons">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" onclick="start()" style="width:90px">提交</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#add').dialog('close')" style="width:90px">取消</a>
+</div>
+</body>
+<script>
+    $(function () {
+        $.extend($.fn.validatebox.defaults.rules, {
+            name: {
+                validator: function(value){
+                    return value!='';
+                },
+                message: '请输入用户名'
+            },
+            pwd: {
+                validator: function(value){
+                    return value!='';
+                },
+                message: '请输入密码'
+            },
+            eq: {
+                validator: function(value){
+
+                    return value==$('#pwd').val();
+                },
+                message: '两次输入密码不一致'
+            }
+        });
+        <!--判断用户是否按下了回车键-->
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                var obtnLogin = $("#submit_btn");
+                obtnLogin.focus();
+                login();
+            }
+        };
+    })
+</script>
+</html>

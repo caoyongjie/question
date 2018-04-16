@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="yu" type="java"*/-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>登录界面</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <link th:href="@{iconfont/style.css}" type="text/css" rel="stylesheet">
+    <link th:href="@{js/themes/default/easyui.css}" type="text/css" rel="stylesheet">
+    <link th:href="@{js/themes/icon.css}" type="text/css" rel="stylesheet">
+    <script th:src="@{js/jquery.min.js}"></script>
+    <script th:src="@{js/jquery.easyui.min.js}"></script>
+    <script th:src="@{js/web.js}"></script>
+    <style type="text/css">
+        *,body{
+            margin: 0;
+            padding: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+<table id="web" style="width:auto;height:auto" data-options="url:'/webList',method:'post'"
+       toolbar="#page" rownumbers="true"  pagination="true" rowStyler="false" singleSelect="true" striped="true">
+    <thead>
+    <tr>
+        <th field="id" width="5%" hidden="true" data-options="align:'center'">题号</th>
+        <th field="problem" width="50%" data-options="align:'center'">题目</th>
+        <th field="answer" width="10%" hidden="true" data-options="align:'center'">答案</th>
+        <th field="flag" width="10%" data-options="align:'center',styler:changeOper">是否已经解答</th>
+        <th field="func" width="10%" data-options="align:'center'">所属模块</th>
+        <th field="category" width="10%" data-options="align:'center'">类别</th>
+        <th field="attr1" width="10%" data-options="align:'center',formatter:formatOper">操作</th>
+    </tr>
+    </thead>
+</table>
+<div id="page" style="padding:3px">
+    <span>所属模块:</span>
+    <input id="func" style="line-height:26px;border:1px solid #ccc">
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="doSearch()" data-options="iconCls:'icon-search'">查询</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="doAdd()" style="float: right" data-options="iconCls:'icon-add'">新增</a>
+</div>
+<div id="add" class="easyui-dialog" data-options="iconCls:'icon-save',modal:true" closed="true"
+     style="width:500px;height: 500px;" buttons="#add-buttons">
+    <form id="fmd" th:action="@{/webAdd}" style="width: auto;height: auto;" method="post">
+        <table width="100%"  cellspacing="1" cellpadding="1">
+            <tr>
+                <td width="150px" height="40px"  align="right">模块:</td>
+                <td><input class="easyui-validatebox" name="func" width="170px" height="35px" data-options="required:true,validType:'func',missingMessage:'请输入所属模块'" /></td>
+            </tr>
+            <tr>
+                <td width="150px" height="40px"  align="right">题目:</td>
+                <td><textarea class="easyui-validatebox" name="problem" width="175px" height="35px" data-options="required:true,validType:'pb',missingMessage:'请输入题目'"></textarea></td>
+            </tr>
+            <tr>
+                <td align="right" height="40px">答案:</td>
+                <td><textarea class="easyui-validatebox" name="answer" width="175px" data-options="missingMessage:'请输入答案'"></textarea></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="edit" class="easyui-dialog" data-options="iconCls:'icon-save',modal:true" closed="true"
+     style="width:500px;height: 500px;" buttons="#del-buttons">
+    <form id="edm" th:action="@{/edit}" style="width: auto;height: auto;" method="post">
+        <table width="100%"  cellspacing="1" cellpadding="1">
+            <tr><input type="hidden" name="id"/><input type="hidden" name="category"/></tr>
+            <tr>
+                <td width="150px" height="40px"  align="right">模块:</td>
+                <td><input class="easyui-validatebox" name="func" width="170px" height="35px" readonly="readonly" /></td>
+            </tr>
+            <tr>
+                <td width="150px" height="40px"  align="right">题目:</td>
+                <td><textarea class="easyui-validatebox" id="problem" name="problem" width="175px" height="35px"></textarea></td>
+            </tr>
+            <tr>
+                <td align="right" height="40px">答案:</td>
+                <td><textarea class="easyui-validatebox" id="answer" name="answer" width="175px"  data-options="required:true,validType:'as',missingMessage:'请输入答案'"></textarea></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="add-buttons">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" onclick="addWeb()" style="width:90px">提交</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#add').dialog('close')" style="width:90px">取消</a>
+</div>
+<div id="del-buttons">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEdit()" style="width:90px">解答</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" onclick="editWeb()" style="width:90px" id="btn" >提交</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#edit').dialog('close')" style="width:90px">取消</a>
+</div>
+<script>
+    $(function () {
+        $.extend($.fn.validatebox.defaults.rules, {
+            pb: {
+                validator: function(value){
+                    return value!='';
+                },
+                message: '请输入题目'
+            },
+            as: {
+                validator: function(value){
+                    return value!='';
+                },
+                message: '请输入答案'
+            },
+            func: {
+                validator: function(value){
+                    return value!='';
+                },
+                message: '请输入所属模块'
+            }
+        });
+    })
+</script>
+</body>
+</html>
